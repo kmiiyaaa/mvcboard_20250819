@@ -1,0 +1,79 @@
+@charset "UTF-8";
+
+<main class="container">
+  <h1>게시글 상세보기</h1>
+  <div class="panel" style="max-width:800px; margin:0 auto; padding:2rem; border-radius:12px; background:#111;">
+    <div class="row" style="display:flex; justify-content:space-between; margin-bottom:1rem;">
+      <strong>제목:</strong>
+      <span><%= dto.getBtitle() %></span>
+    </div>
+    <div class="row" style="display:flex; justify-content:space-between; margin-bottom:1rem;">
+      <strong>작성자:</strong>
+      <span><%= dto.getMemberid() %></span>
+    </div>
+    <div class="row" style="display:flex; justify-content:space-between; margin-bottom:1rem;">
+      <strong>작성일:</strong>
+      <span><%= dto.getBdate() %></span>
+    </div>
+    <div class="row" style="display:flex; justify-content:space-between; margin-bottom:1rem;">
+      <strong>조회:</strong>
+      <span><%= dto.getBhit() %></span>
+    </div>
+    <hr style="border-color:#333;">
+    <div style="white-space:pre-wrap; line-height:1.6; color:#eee; margin-top:1rem;">
+      <%= dto.getBcontent() %>
+    </div>
+
+    <div style="margin-top:2rem; text-align:right;">
+      <a href="boardList.jsp" class="btn">목록으로</a>
+      <a href="write.jsp?bnum=<%= dto.getBnum() %>" class="btn">수정하기</a>
+    </div>
+  </div>
+</main>
+
+
+.detail-card {
+  background: #1a1a1f;
+  padding: 2rem;
+  border-radius: 1.2rem;
+  box-shadow: 0 0 20px rgba(0,0,0,0.8);
+}
+
+.detail-title {
+  font-size: 1.8rem;
+  margin-bottom: 1rem;
+  color: #f5f5f5;
+}
+
+.detail-meta {
+  font-size: 0.9rem;
+  color: #bbb;
+  margin-bottom: 1.5rem;
+  display: flex;
+  gap: 1rem;
+}
+
+.detail-content {
+  font-size: 1rem;
+  line-height: 1.6;
+  color: #ddd;
+  margin-bottom: 2rem;
+}
+
+.detail-actions {
+  text-align: right;
+}
+
+.detail-actions .btn {
+  background: #0071e3;
+  color: white;
+  padding: 0.6rem 1.2rem;
+  border-radius: 0.5rem;
+  text-decoration: none;
+  transition: background 0.3s;
+}
+
+.detail-actions .btn:hover {
+  background: #005bb5;
+}
+
