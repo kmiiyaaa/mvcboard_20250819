@@ -28,12 +28,13 @@
 
 <main class="container">
   <h1>자유 게시판</h1>
-  <div style="text-align:right; margin-bottom:1rem;">
-  <span stye="color:rosybrown">
+   <span stye="color:rosybrown;">
    	<c:if test="${not empty sessionScope.sid }">
    		<b>${sessionScope.sid}</b>님 로그인중 
    	</c:if>
    </span>
+  <div style="text-align:right; margin-bottom:1rem;">
+ 
     <a href="insert.do"><button class="btn">글쓰기</button></a>
   </div>
 

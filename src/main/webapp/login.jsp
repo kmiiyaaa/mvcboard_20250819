@@ -8,7 +8,7 @@
     <!-- 기존 CSS 유지 -->
     <link rel="stylesheet" href="css/login.css">
 </head>
-<body>ㄹ
+<body>
     <div class="login-container">
     <form action="loginOk.do" method="post">
     

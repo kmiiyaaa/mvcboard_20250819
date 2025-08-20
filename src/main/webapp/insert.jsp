@@ -44,7 +44,7 @@
 
       <div class="row" style="flex-direction:column; align-items:flex-start;">
         <label>작성자</label>
-        <input type="text" name="memberid" placeholder="작성자를 입력하세요"
+        <input type="text" name="memberid" value=${sessionScope.sid} readonly="readonly"
                style="width:100%; padding:0.5rem; border-radius:8px; border:1px solid #444; background:#111; color:#eee;">
       </div>
 
