@@ -32,17 +32,17 @@
     <input type="hidden" name="bnum" value="${boardDto.bnum }">
       <div class="form-group">
         <label for="title">제목</label>
-        <input type="text" id="title" name="title" required />
+        <input type="text" id="title" name="btitle" required />
       </div>
 
       <div class="form-group">
         <label for="author">작성자</label>
-        <input type="text" id="author" name="author"  readonly />
+        <input type="text" id="author" name="memberid"  readonly />
       </div>
 
       <div class="form-group">
         <label for="content">내용</label>
-        <textarea id="content" name="content" rows="10" required>
+        <textarea id="content" name="bcontent" rows="10" required>
 
 		</textarea>
       </div>

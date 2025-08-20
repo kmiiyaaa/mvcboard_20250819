@@ -77,14 +77,14 @@ public class BoardDao {
 		return bDtos;  // 글(bDto) 여러개가 담긴 list인 bDtos 반환
 		}
 	
-	public BoardDto getBoardDetail(int bnum) {
+	public BoardDto getBoardDetail(String bnum) { // 글하나 불러오는 메서드
 	    String sql = "SELECT * FROM board WHERE bnum=?";
 	    BoardDto dto = null;
 	    try {
 	        Class.forName(driverName);
 	        conn = DriverManager.getConnection(url, userName, password);
 	        pstmt = conn.prepareStatement(sql);
-	        pstmt.setInt(1, bnum);
+	        pstmt.setString(1, bnum);
 	        rs = pstmt.executeQuery();
 
 	        if(rs.next()) {
@@ -109,42 +109,7 @@ public class BoardDao {
 	    return dto;
 	}
 	
-	public BoardDto getBoardDetail1(int bnum) {
-	    String sql = "SELECT * FROM board WHERE bnum=?";
-	    BoardDto dto = null;
-
-	    try {
-	        Class.forName(driverName);
-	        conn = DriverManager.getConnection(url, userName, password);
-	        pstmt = conn.prepareStatement(sql);
-	        pstmt.setInt(1, bnum);
-	        rs = pstmt.executeQuery();
-
-	        if(rs.next()) {
-	            dto = new BoardDto(
-	                rs.getInt("bnum"),
-	                rs.getString("btitle"),
-	                rs.getString("bcontent"),
-	                rs.getString("memberid"),
-	                rs.getInt("bhit"),
-	                rs.getString("bdate")
-	            );
-	        }
-	    } catch(Exception e) {
-	        e.printStackTrace();
-	    } finally {
-	        try { if(rs!=null) 
-	        	rs.close(); 
-	        } catch(Exception e) {}
-	        try { if(pstmt!=null) 
-	        	pstmt.close(); 
-	        } catch(Exception e) {}
-	        try { if(conn!=null) 
-	        	conn.close(); 
-	        } catch(Exception e) {}
-	    }
-	    return dto;
-	}
+	
 	
 	// 글 등록
 	public void insertBoard(String btitle, String memberid, String bcontent ) {  //user가 쓰는건 아니어서 bhit는 안가져와도 된다
@@ -184,30 +149,30 @@ public class BoardDao {
 	    }
 	}
 
-	// 글 수정
-	public boolean updateBoard(String btitle, String memberid, String bcontent) {
-	    String sql = "UPDATE board SET btitle=?, bcontent=?, memberid=? WHERE bnum=?";
-	    try {
-	        Class.forName(driverName);
-	        conn = DriverManager.getConnection(url, userName, password);
-	        pstmt = conn.prepareStatement(sql);
-	      //  pstmt.setString(1, dto.getBtitle());
-	      //  pstmt.setString(2, dto.getBcontent());
-	      //  pstmt.setString(3, dto.getMemberid());
-	      //  pstmt.setInt(4, dto.getBnum());
-	        int count = pstmt.executeUpdate();
-	        return count > 0;
-	    } catch (Exception e) {
-	        e.printStackTrace();
-	        return false;
-	    } finally {
-	        try {
-	            if(pstmt != null) pstmt.close();
-	            if(conn != null) conn.close();
-	        } catch(Exception e) { e.printStackTrace(); }
-	    }
-	}
-	
+//	// 글 수정
+//	public boolean updateBoard(String btitle, String memberid, String bcontent) {
+//	    String sql = "UPDATE board SET btitle=?, bcontent=?, memberid=? WHERE bnum=?";
+//	    try {
+//	        Class.forName(driverName);
+//	        conn = DriverManager.getConnection(url, userName, password);
+//	        pstmt = conn.prepareStatement(sql);
+//	      //  pstmt.setString(1, dto.getBtitle());
+//	      //  pstmt.setString(2, dto.getBcontent());
+//	      //  pstmt.setString(3, dto.getMemberid());
+//	      //  pstmt.setInt(4, dto.getBnum());
+//	        int count = pstmt.executeUpdate();
+//	        return count > 0;
+//	    } catch (Exception e) {
+//	        e.printStackTrace();
+//	        return false;
+//	    } finally {
+//	        try {
+//	            if(pstmt != null) pstmt.close();
+//	            if(conn != null) conn.close();
+//	        } catch(Exception e) { e.printStackTrace(); }
+//	    }
+//	}
+//	
 	public BoardDto contentView(String boardnum) { //게시판 글 목록에서 유저가 클릭한 글 번호의 글 dto 반환 메서드
 		
 		 	String sql = "SELECT * FROM board WHERE bnum = ?";
@@ -255,7 +220,8 @@ public class BoardDao {
 		}
 		
 	
-			public void boadUpdate(String bnum, String btitle, String bcontent) {
+			public void boardUpdate(String bnum, String btitle, String bcontent) {
+				
 				String sql = "UPDATE board SET btitle=?, bcontent=? WHERE bnum=?";
 		
 			    try {
@@ -263,18 +229,16 @@ public class BoardDao {
 			        conn = DriverManager.getConnection(url, userName, password);
 			        
 			        pstmt = conn.prepareStatement(sql);
-			  
-			        
 			        pstmt.setString(1,btitle);
 			        pstmt.setString(2, bcontent);
 			        pstmt.setString(3, bnum);
 			        
-			        int count = pstmt.executeUpdate();
+			       pstmt.executeUpdate();
 			    
 			   
 			    
 			    } catch (Exception e) {
-			    	System.out.println("글 등록 실패");
+			    	System.out.println("글 수정 실패");
 			        e.printStackTrace();
 			        
 			    } finally {
@@ -288,10 +252,41 @@ public class BoardDao {
 			        } catch(Exception e) {
 			        	e.printStackTrace(); 
 			        	}
-			    
-			    }
-			    
-			    
+			    }		    	    
+			}
+			
+	
+			public void boardDelete(String bnum) {
+				
+				String sql = "DELETE FROM board WHERE bnum = ? ";
+				
+				 try {
+				        Class.forName(driverName);
+				        conn = DriverManager.getConnection(url, userName, password);				
+				        
+				        pstmt = conn.prepareStatement(sql);
+				        pstmt.setString(1,bnum);
+				        pstmt.executeUpdate();
+				        
+				        
+				 } catch (Exception e) {
+				    	System.out.println("글 삭제 실패");
+				        e.printStackTrace();
+				        
+				    } finally {
+				        try {
+				            if(pstmt != null) {
+				            	pstmt.close();
+				            }
+				            if(conn != null) {
+				            	conn.close();
+				            }
+				        } catch(Exception e) {
+				        	e.printStackTrace(); 
+				        	}
+				    }		    	    
+				
+				
 			}
 		
 	}

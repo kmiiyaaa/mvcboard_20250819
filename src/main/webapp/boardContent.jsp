@@ -59,11 +59,13 @@
   <div class="content-box" align="center">
   <br><br>
     ${boardDto.bcontent}
+  <br><br>
   </div>
-  <a href="write.do?bnum=${boardDto.bnum} }"><button class="btn"> 수정 </button></a>
+  <a href="modifyOk.do?bnum=${boardDto.bnum}"><button class="btn"> 수정 </button></a>
+  <a href="delete.do?bnum=${boardDto.bnum}"><button class="btn"> 삭제 </button></a>
 </main>
 
     <footer>© 2025 Board</footer>
-  </main>
+ 
 </body>
 </html>

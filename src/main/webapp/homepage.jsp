@@ -80,14 +80,15 @@ footer{margin-top:80px; text-align:center; color:var(--muted); padding:20px}
 <div>
 <a href="#" style="margin-right:16px;">공지</a>
 <a href="boardList.do" style="margin-right:16px;">게시판</a>
-<a href="#">로그인</a>
+<a href="login.do">로그인</a>
 </div>
 </div>
 </div>
 
 
 <!-- 히어로 섹션 -->
-<section class="hero">
+<section class="hero">+
+
 <h1>Welcome</h1>
 <p>즐거운 소통 페이지 입니다.</p>
 <a href="boardList.do"><button class="btn">게시판 바로가기</button></a>

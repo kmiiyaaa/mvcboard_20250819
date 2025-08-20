@@ -61,7 +61,7 @@ public class board_controller extends HttpServlet {
 		
 		
 		
-		} else if(comm.equals("/wirte.do")) {  // 글 수정 폼 이동
+		} else if(comm.equals("/write.do")) {  // 글 수정 폼 이동
 			String bnum = request.getParameter("bnum"); // 수정하려고 하는 글 번호
 			BoardDto boardDto = boardDao.contentView(bnum);
 			
@@ -78,16 +78,26 @@ public class board_controller extends HttpServlet {
 			String memberid =request.getParameter("memberid");
 			String bcontent =request.getParameter("bcontent");
 			
+			boardDao.boardUpdate(bnum, btitle, bcontent);
 			
-			viewpage = "boardList.do";
+			BoardDto boardDto = boardDao.getBoardDetail(bnum);
+			request.setAttribute("boardDto", boardDto);
+			
+			viewpage = "boardContent.jsp";
 		
 		
 		}else if(comm.equals("/delete.do")) {  // 글 삭제
+			
+			String bnum=request.getParameter("bnum");
+			
+
+			boardDao.boardDelete(bnum);
+			
 			viewpage = "boardList.do";
 			
 		
 		}else if(comm.equals("/boardContent.do")) { // 글내용보기
-			String bnum = request.getParameter("bnum");
+			String bnum = request.getParameter("bnum");  //유저가 삭제할 글의 번호
 			
 			BoardDto boardDto = boardDao.contentView(bnum); //boardDto 반환(유저가 선택한 글번호에 해당하는 dto반환)
 			
@@ -101,7 +111,7 @@ public class board_controller extends HttpServlet {
 				
 			viewpage = "boardContent.jsp";
 			
-		} else if(comm.equals("/wirteOk.do")) {  // 글 수정
+		} else if(comm.equals("/writeOk.do")) {  // 글 수정
 			request.setCharacterEncoding("utf-8");
 			
 			String btitle =	request.getParameter("btitle");
@@ -112,9 +122,15 @@ public class board_controller extends HttpServlet {
 			response.sendRedirect("boardList.do");  // 포워딩 하지 않고 강제로 list.do 이동
 			return; // 프로그램 진행 멈춤
 			
-		} else {
+		} else if(comm.equals("/login.do"))	{
+			
+			
+			viewpage ="login.jsp";
+		
+		
+		}else {
 			viewpage = "homepage.jsp";
-		}
+		} 
 		
 		
 		RequestDispatcher dispatcher = request.getRequestDispatcher(viewpage); 
