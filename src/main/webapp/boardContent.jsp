@@ -43,9 +43,10 @@
     <span><strong>번호</strong> ${boardDto.bnum}</span>
       
     <span><strong>작성자</strong> ${boardDto.memberid}</span>
-    
-	   <span><strong>조회수</strong> ${boardDto.bhit}</span>
-	  <span><strong>작성일</strong> ${boardDto.bdate}</span>
+    <span><strong>이메일</strong> ${}</span>
+    <span><strong>작성일</strong> ${boardDto.bdate}</span>
+	  <span><strong>조회수</strong> ${boardDto.bhit}</span>
+	  
    
   </div>
   <hr>

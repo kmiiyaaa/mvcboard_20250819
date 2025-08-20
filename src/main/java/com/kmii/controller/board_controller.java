@@ -61,7 +61,7 @@ public class board_controller extends HttpServlet {
 		
 		if(comm.equals("/boardList.do")) { //게시판의 모든 글 보기 요청
 		    bDtos = boardDao.boardList();
-		    request.setAttribute("bDtos", bmDtos); 
+		    request.setAttribute("bDtos", bDtos); 
 		    viewpage = "boardList.jsp";
 		
 		
