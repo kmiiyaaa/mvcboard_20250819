@@ -208,12 +208,11 @@ public class BoardDao {
 	    }
 	}
 	
-	public BoardDto contentView(String bnum) { //게시판 글 목록에서 유저가 클릭한 글 번호의 글 dto 반환 메서드
+	public BoardDto contentView(String boardnum) { //게시판 글 목록에서 유저가 클릭한 글 번호의 글 dto 반환 메서드
 		
 		 	String sql = "SELECT * FROM board WHERE bnum = ?";
-		
-			BoardDto dto = new BoardDto();
-		    
+			// BoardDto boardDto = new BoardDto();
+		 	BoardDto boardDto = null;
 
 		    try {
 		    	
@@ -221,21 +220,24 @@ public class BoardDao {
 		        conn = DriverManager.getConnection(url, userName, password);
 		        
 		        pstmt = conn.prepareStatement(sql);
-		        pstmt.setString(1, bnum);
-
+		        pstmt.setString(1, boardnum);
 		        rs = pstmt.executeQuery();
 
-		        if (rs.next()) {
-		        
-		            dto.setBnum(rs.getInt("bnum"));
-		            dto.setBtitle(rs.getString("btitle"));
-		            dto.setBcontent(rs.getString("bcontent"));
-		            dto.setMemberid(rs.getString("memberid"));
-		            dto.setBdate(rs.getString("bdate"));
-		            dto.setBhit(rs.getInt("bhit"));
+		        while (rs.next()) {
+		        	
+
+		        	int bnum = rs.getInt("bnum");
+					String btitle = rs.getString("btitle");
+					String bcontent = rs.getString("bcontent");
+					String memberid = rs.getString("memberid");
+					int bhit = rs.getInt("bhit");
+					String bdate = rs.getString("bdate");
+		        	
+		        	boardDto = new BoardDto(bnum, btitle, bcontent, memberid, bhit, bdate);
 		        }
 
 		    } catch(Exception e) {
+		    	System.out.println("게시판 글 가져오기 실패");
 		        e.printStackTrace();
 		    } finally {
 		        try { if(rs!=null) 
@@ -249,9 +251,48 @@ public class BoardDao {
 		        } catch(Exception e) {}
 		    }
 
-		    return dto;
+		    return boardDto;
 		}
 		
+	
+			public void boadUpdate(String bnum, String btitle, String bcontent) {
+				String sql = "UPDATE board SET btitle=?, bcontent=? WHERE bnum=?";
+		
+			    try {
+			        Class.forName(driverName);
+			        conn = DriverManager.getConnection(url, userName, password);
+			        
+			        pstmt = conn.prepareStatement(sql);
+			  
+			        
+			        pstmt.setString(1,btitle);
+			        pstmt.setString(2, bcontent);
+			        pstmt.setString(3, bnum);
+			        
+			        int count = pstmt.executeUpdate();
+			    
+			   
+			    
+			    } catch (Exception e) {
+			    	System.out.println("글 등록 실패");
+			        e.printStackTrace();
+			        
+			    } finally {
+			        try {
+			            if(pstmt != null) {
+			            	pstmt.close();
+			            }
+			            if(conn != null) {
+			            	conn.close();
+			            }
+			        } catch(Exception e) {
+			        	e.printStackTrace(); 
+			        	}
+			    
+			    }
+			    
+			    
+			}
 		
 	}
 

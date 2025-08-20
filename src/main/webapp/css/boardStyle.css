@@ -42,3 +42,214 @@ footer{color:#8a8a92; font-size:14px; text-align:center; padding:40px 0}
 .btn:hover {
   background-color: #003c99;
 }
+
+
+.container {
+  max-width: 800px;
+  margin: 20px auto;
+  font-family: "Segoe UI", sans-serif;
+}
+
+h1 {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.detail-card {
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  padding: 15px;
+  background: #fafafa;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+
+.row {
+  display: flex;
+  border-bottom: 1px solid #eee;
+  padding: 10px 0;
+}
+
+.row:last-child {
+  border-bottom: none;
+}
+
+.label {
+  flex: 0.3;
+  font-weight: bold;
+  color: #333;
+}
+
+.value {
+  flex: 0.7;
+  color: #555;
+}
+
+.value.content {
+  white-space: pre-line; /* 줄바꿈 유지 */
+}
+
+.container {
+  max-width: 800px;
+  margin: 30px auto;
+  font-family: "Segoe UI", sans-serif;
+}
+
+.post-title {
+  font-size: 1.8rem;
+  font-weight: bold;
+  margin-bottom: 15px;
+  border-bottom: 2px solid #4caf50;
+  padding-bottom: 10px;
+}
+
+.meta-box {
+  display: flex;
+  justify-content: space-between;
+  background: #f9f9f9;
+  padding: 10px 15px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  font-size: 0.9rem;
+  color: #444;
+}
+
+.meta-box span {
+  flex: 1;
+  text-align: center; /* 가로 가운데 정렬 */
+}
+
+.meta-box {
+  display: flex;
+  justify-content: space-between; /* 가로 정렬 */
+  align-items: center;            /* 세로 가운데 정렬 */
+  background: #f9f9f9;
+  padding: 10px 15px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  font-size: 0.9rem;
+  color: #444;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Noto Sans KR', sans-serif;
+    background-color: #121212;
+    color: #ffffff;
+}
+
+/* 상단 네비 */
+.nav {
+    background-color: #1f1f1f;
+    padding: 15px 0;
+    border-bottom: 1px solid #333;
+}
+
+.nav-inner {
+    width: 90%;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.nav a {
+    color: #ffffff;
+    text-decoration: none;
+    margin-left: 15px;
+}
+
+.nav a:hover {
+    color: #1e90ff;
+}
+
+/* 게시글 컨테이너 */
+.board-container {
+    width: 600px;
+    margin: 50px auto;
+    background-color: #1f1f1f;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+}
+
+/* 제목 */
+.board-container h2 {
+    text-align: center;
+    margin-bottom: 30px;
+    font-size: 1.8em;
+}
+
+/* 폼 그룹 */
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+}
+
+.form-group input,
+.form-group textarea {
+    width: 100%;
+    padding: 12px;
+    border-radius: 8px;
+    border: 1px solid #333;
+    background-color: #2b2b2b;
+    color: #fff;
+    font-size: 1em;
+    resize: none;
+}
+
+.form-group input:focus,
+.form-group textarea:focus {
+    border-color: #1e90ff;
+    outline: none;
+}
+
+/* 버튼 영역 */
+.form-buttons {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+}
+
+.btn {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 1em;
+    transition: all 0.2s ease;
+}
+
+.btn-primary {
+    background-color: #1e90ff;
+    color: #fff;
+}
+
+.btn-primary:hover {
+    background-color: #0f6cd2;
+}
+
+.btn-secondary {
+    background-color: #444;
+    color: #fff;
+}
+
+.btn-secondary:hover {
+    background-color: #555;
+}
+
+/* footer */
+footer {
+    text-align: center;
+    margin-top: 50px;
+    color: #777;
+    font-size: 0.9em;
+}

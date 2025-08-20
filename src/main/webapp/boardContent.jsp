@@ -1,6 +1,26 @@
 <%@ page import="com.kmii.dao.BoardDao" %>
 <%@ page import="com.kmii.dto.BoardDto" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%
+	
+/*
+	if(request.getAttribute("msg") != null){   // 웹 서블릿에서 넘겨준 값을 뺄때는 getattribute사용
+		String msginfo = request.getAttribute("msg").toString();
+		System.out.println("msginfo");
+		out.println("<script>alert('"+msginfo+"');window.location.href('boardList.do');</script>");
+	}
+*/
+		//	out.println("<script>alert('"+msg+"');window.location.href('boardList.do');</script>");
+		//out.println("<script>alert('해당글이 존재하지 않습니다');</script>");
+	
+		System.out.println(request.getParameter("msg"));
+	
+		if(request.getParameter("msg") != null) {
+			out.println("<script>alert('해당글이 존재하지 않습니다');window.location.href('boardList.do');</script>");
+		}
+	
+
+%>
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -16,32 +36,32 @@
       <a href="homepage.jsp" style="color:inherit; text-decoration:none;">HOME</a>
     </div>
     <div>
-      <a href="#" style="color:var(--accent); text-decoration:none">로그인</a>
 </div>
       <div><a href="#" style="color:var(--accent); text-decoration:none">로그인</a></div>
     </div>
   </div>
 
-  <main class="container">
-    <h1>게시글 상세보기</h1>
-    <div class="panel">
-         <!-- 상세보기 카드 -->
-                  <div class="table">
-                    <div class="thead">
-                      <div style="flex:1;">제목</div>
-                      <div style="flex:1;">작성자</div>
-                      <div style="flex:1;">작성일</div>
-                      <div style="flex:0.5;">조회</div>
-                    </div>
+<main class="container" align="center">
+  <h1 class="post-title">${boardDto.btitle}</h1>
+  <hr>
+  
+  <!-- 메타 정보 영역 -->
+  <div class="meta-box" align="center">
+    <span><strong>번호</strong> ${boardDto.bnum}</span>
+      
+    <span><strong>작성자</strong> ${boardDto.memberid}</span>
+    <span><strong>조회수</strong> ${boardDto.bhit}</span>
+    <span><strong>작성일</strong> ${boardDto.bdate}</span>
+  </div>
+  <hr>
 
-                  ${boardDto.bnum}
-                  ${boardDto.btitle}
-                  ${boardDto.bcontent}
-                  ${boardDto.memberid}
-                  ${boardDto.bhit}
-                  
-     
-    </div>
+  <!-- 본문 내용 -->
+  <div class="content-box" align="center">
+  <br><br>
+    ${boardDto.bcontent}
+  </div>
+  <a href="write.do?bnum=${boardDto.bnum} }"><button class="btn"> 수정 </button></a>
+</main>
 
     <footer>© 2025 Board</footer>
   </main>
