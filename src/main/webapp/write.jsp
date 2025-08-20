@@ -4,9 +4,13 @@
 
 
 <%
-    // 수정 모드인지 확인
-    BoardDto boardDto = (BoardDto) request.getAttribute("boardDto");
-    boolean isEdit = (boardDto != null);
+	BoardDto boardDto = (BoardDto) request.getAttribute("boardDto");
+	boolean isEdit = (boardDto != null);
+
+	if(request.getParameter("error") != null) {
+    out.println("<script>alert('수정 또는 삭제 권한이 없는 글입니다.');history.go(-1);</script>");
+    return;  // 페이지 실행 중단
+}
 %>
 
 <!DOCTYPE html>
@@ -30,7 +34,7 @@
 </div>
 
 <div class="board-container">
-    <h2><%= isEdit ? "게시글 수정" : "새 글 작성" %></h2>
+    <h2><%= isEdit ? "게시글 수정" : "게시글 수정" %></h2>
 
     <form action="<%= isEdit ? "modifyOk.do" : "writeOk.do" %>" method="post" class="edit-form">
         <% if(isEdit) { %>

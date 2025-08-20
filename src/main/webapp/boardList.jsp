@@ -45,6 +45,7 @@
           <th>No</th>
           <th>제목</th>
           <th>작성자</th>
+          <th>이메일</th>
           <th>작성일</th>
           <th>조회</th>
         </tr>
@@ -52,7 +53,7 @@
         <tbody>
         <c:forEach items="${bDtos}" var="bDto">
         <tr>
-          <td>${bDto.bnum }</td>
+          <td>${bDto.bnum }</td> 
           <td>
           <c:choose>
           	<c:when test="${fn:length(bDto.btitle) > 35}">
@@ -64,6 +65,7 @@
           </c:choose>
           </td>
           <td>${bDto.memberid }</td>
+          <td>${bDto.memberDto.memberemail}</td>
           <td>${fn:substring(bDto.bdate,0,10)}</td>
           <td>${bDto.bhit }</td>
         </tr>

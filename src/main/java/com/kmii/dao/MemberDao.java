@@ -46,10 +46,10 @@ public class MemberDao {
 		        }
 			    
 		 } catch(Exception e) {
-			    System.out.println("로그인 실패");
-			      e.printStackTrace();
+			    	System.out.println("로그인 실패");
+			        e.printStackTrace();
 			    
-		 } finally {
+			    } finally {
 			        try { if(rs!=null) 
 			        	rs.close(); 
 			        } catch(Exception e) {}

@@ -12,6 +12,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.kmii.dto.BoardMemberDto;
 import com.kmii.dao.BoardDao;
 import com.kmii.dao.MemberDao;
 import com.kmii.dto.BoardDto;
@@ -54,18 +55,20 @@ public class board_controller extends HttpServlet {
 		BoardDao boardDao = new BoardDao();
 		MemberDao memberDao = new MemberDao();
 		List<BoardDto> bDtos = new ArrayList<BoardDto>();
+		List<BoardMemberDto> bmDtos = new ArrayList<BoardMemberDto>();
 		HttpSession session = null;
 		
 		
 		if(comm.equals("/boardList.do")) { //게시판의 모든 글 보기 요청
 		    bDtos = boardDao.boardList();
-		    request.setAttribute("bDtos", bDtos); 
+		    request.setAttribute("bDtos", bmDtos); 
 		    viewpage = "boardList.jsp";
 		
 		
 		} else if(comm.equals("/insert.do")) { // 글쓰기 폼으로 이동
 			session = request.getSession();  // 세션 초기화
 			String sid = (String) session.getAttribute("sid");
+			
 			if(sid != null) { //로그인 한 상태
 				viewpage="insert.jsp";
 			} else {
@@ -78,8 +81,18 @@ public class board_controller extends HttpServlet {
 		
 		
 		} else if(comm.equals("/write.do")) {  // 글 수정 폼 이동
+			request.setCharacterEncoding("utf-8");
+			String sid = (String) session.getAttribute("sid");
+			
 			String bnum = request.getParameter("bnum"); // 수정하려고 하는 글 번호
 			BoardDto boardDto = boardDao.contentView(bnum);
+			
+			if(boardDto.getMemberid().equals(sid)) {
+				request.setAttribute("boardDto", boardDto);
+				viewpage = "write.jsp";
+			} else {
+				viewpage = "boardList.do";
+			}
 			
 			request.setAttribute("boardDto", boardDto);
 			viewpage = "write.jsp";
@@ -88,9 +101,14 @@ public class board_controller extends HttpServlet {
 		} else if(comm.equals("/modifyOk.do")) {    // 수정
 			
 			request.setCharacterEncoding("utf-8");
+			
+			
+		
 		
 			String bnum = request.getParameter("bnum");
 			String btitle =	request.getParameter("btitle");
+			
+			
 			String memberid =request.getParameter("memberid");
 			String bcontent =request.getParameter("bcontent");
 			
@@ -103,17 +121,30 @@ public class board_controller extends HttpServlet {
 		
 		
 		}else if(comm.equals("/delete.do")) {  // 글 삭제
-			
 			String bnum=request.getParameter("bnum");
+			session = request.getSession(); 
 			
-
+			String sid = (String) session.getAttribute("sid");
+			
+			if(sid != null) { //로그인 한 상태
+				viewpage="insert.jsp";
+			} else {
+				response.sendRedirect("login.do?msg=2");
+				return;
+			}
+			
+			viewpage = "insert.jsp";
+			
 			boardDao.boardDelete(bnum);
 			
 			viewpage = "boardList.do";
 			
 		
 		}else if(comm.equals("/boardContent.do")) { // 글내용보기
-			String bnum = request.getParameter("bnum");  //유저가 삭제할 글의 번호
+			String bnum = request.getParameter("bnum");
+			
+			//조회수 올려주는 메서드 호출
+			boardDao.updateBhit(bnum); // 조회수 증가
 			
 			BoardDto boardDto = boardDao.contentView(bnum); //boardDto 반환(유저가 선택한 글번호에 해당하는 dto반환)
 			

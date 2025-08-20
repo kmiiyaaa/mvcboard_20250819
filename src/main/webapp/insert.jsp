@@ -21,7 +21,7 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8" />
-  <title>글쓰기</title>
+  <title>새 글쓰기</title>
   <link rel="stylesheet" href="css/boardStyle.css">
 </head>
 <body>
