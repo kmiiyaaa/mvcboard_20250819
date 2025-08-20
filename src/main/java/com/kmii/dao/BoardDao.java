@@ -28,7 +28,7 @@ public class BoardDao {
 		
 	public List<BoardDto>  boardList() { // 게시판 모든글 리스트 가져와서 반환하는 메서드, 매개변수 따로 필요는 없다/ 글하나 -> boardDto, 여러개는 list쓴다
 		//String sql = "SELECT * FROM board ORDER BY bnum DESC";
-		String sql = "SELECT  ROW_NUMBER() over (order by bnum desc) as bno, "
+		String sql = "SELECT  ROW_NUMBER() over (ORDER BY bnum ASC) as bno, "
 				   + "b.bnum, b.btitle, b.bcontent, b.memberid, m.memberemail, b.bdate, b.bhit "
 		           + "FROM board b "
 		           + "INNER JOIN members m ON b.memberid = m.memberid "
@@ -170,33 +170,12 @@ public class BoardDao {
 	    }
 	}
 
-//	// 글 수정
-//	public boolean updateBoard(String btitle, String memberid, String bcontent) {
-//	    String sql = "UPDATE board SET btitle=?, bcontent=?, memberid=? WHERE bnum=?";
-//	    try {
-//	        Class.forName(driverName);
-//	        conn = DriverManager.getConnection(url, userName, password);
-//	        pstmt = conn.prepareStatement(sql);
-//	      //  pstmt.setString(1, dto.getBtitle());
-//	      //  pstmt.setString(2, dto.getBcontent());
-//	      //  pstmt.setString(3, dto.getMemberid());
-//	      //  pstmt.setInt(4, dto.getBnum());
-//	        int count = pstmt.executeUpdate();
-//	        return count > 0;
-//	    } catch (Exception e) {
-//	        e.printStackTrace();
-//	        return false;
-//	    } finally {
-//	        try {
-//	            if(pstmt != null) pstmt.close();
-//	            if(conn != null) conn.close();
-//	        } catch(Exception e) { e.printStackTrace(); }
-//	    }
-//	}
-//	
+
 	public BoardDto contentView(String boardnum) { //게시판 글 목록에서 유저가 클릭한 글 번호의 글 dto 반환 메서드
 		
 		 	String sql = "SELECT * FROM board WHERE bnum = ?";
+		 	
+			
 			// BoardDto boardDto = new BoardDto();
 		 	BoardDto boardDto = null;
 
