@@ -2,6 +2,7 @@ package com.kmii.dto;
 
 public class BoardDto {
 	
+	private int bno; // 새로운 글 게시판 번호
 	private int bnum;   // 게시판 글 번호
 	private String btitle;
 	private String bcontent;
@@ -14,12 +15,11 @@ public class BoardDto {
 	public BoardDto() {
 
 	}
-	
-	
 
-	public BoardDto(int bnum, String btitle, String bcontent, String memberid, int bhit, String bdate,
+	public BoardDto(int bno, int bnum, String btitle, String bcontent, String memberid, int bhit, String bdate,
 			MemberDto memberDto) {
 		super();
+		this.bno = bno;
 		this.bnum = bnum;
 		this.btitle = btitle;
 		this.bcontent = bcontent;
@@ -27,6 +27,14 @@ public class BoardDto {
 		this.bhit = bhit;
 		this.bdate = bdate;
 		this.memberDto = memberDto;
+	}
+
+	public int getBno() {
+		return bno;
+	}
+
+	public void setBno(int bno) {
+		this.bno = bno;
 	}
 
 	public int getBnum() {
@@ -84,5 +92,7 @@ public class BoardDto {
 	public void setMemberDto(MemberDto memberDto) {
 		this.memberDto = memberDto;
 	}
+	
+	
 
 }

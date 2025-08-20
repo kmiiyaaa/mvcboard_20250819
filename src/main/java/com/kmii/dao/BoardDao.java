@@ -28,10 +28,11 @@ public class BoardDao {
 		
 	public List<BoardDto>  boardList() { // 게시판 모든글 리스트 가져와서 반환하는 메서드, 매개변수 따로 필요는 없다/ 글하나 -> boardDto, 여러개는 list쓴다
 		//String sql = "SELECT * FROM board ORDER BY bnum DESC";
-		String sql = "SELECT b.bnum, b.btitle, b.bcontent, b.memberid, m.memberemail, b.bdate, b.bhit "
+		String sql = "SELECT  ROW_NUMBER() over (order by bnum desc) as bno, "
+				   + "b.bnum, b.btitle, b.bcontent, b.memberid, m.memberemail, b.bdate, b.bhit "
 		           + "FROM board b "
 		           + "INNER JOIN members m ON b.memberid = m.memberid "
-		           + "ORDER BY b.bnum DESC";
+		           + "ORDER BY bno DESC";
 		//List<BoardMemberDto> bmDtos = new ArrayList<BoardMemberDto>();
 		List<BoardDto> bDtos = new ArrayList<BoardDto>(); 
 		
@@ -46,6 +47,7 @@ public class BoardDao {
 			
 			
 			while(rs.next()) {   // 글이하나가 아니고 여러개라 if는 x, while로 돌려줌
+				
 				int bnum = rs.getInt("bnum");  // boarddto에서 받는게 아니고 sql문에서 뽑아준거
 				String btitle = rs.getString("btitle");
 				String bcontent = rs.getString("bcontent");
@@ -54,13 +56,15 @@ public class BoardDao {
 				int bhit = rs.getInt("bhit");
 				String bdate = rs.getString("bdate");
 				
+				int bno = rs.getInt("bno");
+				
 				//BoardMemberDto bmDto = new BoardMemberDto(bnum, btitle, bcontent, memberid, memberemail ,bhit, bdate);
 				MemberDto memberDto = new MemberDto();
 				memberDto.setMemberid(memberid);
 				memberDto.setMemberemail(memberemail);
 				
 				
-				BoardDto bDto = new BoardDto(bnum, btitle, bcontent, memberid, bhit, bdate, memberDto);
+				BoardDto bDto = new BoardDto(bno, bnum, btitle, bcontent, memberid, bhit, bdate, memberDto);
 				bDtos.add(bDto);
 				
 				
@@ -207,7 +211,7 @@ public class BoardDao {
 
 		        while (rs.next()) {
 		        	
-
+		        	int bno = rs.getInt("bno");
 		        	int bnum = rs.getInt("bnum");
 					String btitle = rs.getString("btitle");
 					String bcontent = rs.getString("bcontent");
@@ -220,7 +224,7 @@ public class BoardDao {
 					memberDto.setMemberid(memberid);
 					memberDto.setMemberemail(memberemail);
 		        	
-		        	boardDto = new BoardDto(bnum, btitle, bcontent, memberid, bhit, bdate, memberDto);
+		        	boardDto = new BoardDto(bno, bnum, btitle, bcontent, memberid, bhit, bdate, memberDto);
 		        }
 
 		    } catch(Exception e) {
