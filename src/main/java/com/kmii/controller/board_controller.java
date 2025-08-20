@@ -6,11 +6,14 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 import com.kmii.dao.BoardDao;
+import com.kmii.dao.MemberDao;
 import com.kmii.dto.BoardDto;
 
 /**
@@ -49,16 +52,29 @@ public class board_controller extends HttpServlet {
 		
 		String viewpage = null;
 		BoardDao boardDao = new BoardDao();
+		MemberDao memberDao = new MemberDao();
 		List<BoardDto> bDtos = new ArrayList<BoardDto>();
+		HttpSession session = null;
 		
 		
 		if(comm.equals("/boardList.do")) { //게시판의 모든 글 보기 요청
 		    bDtos = boardDao.boardList();
 		    request.setAttribute("bDtos", bDtos); 
 		    viewpage = "boardList.jsp";
-		} else if(comm.equals("/insert.do")) { // 글쓰기
-			viewpage = "insert.jsp";
 		
+		
+		} else if(comm.equals("/insert.do")) { // 글쓰기 폼으로 이동
+			session = request.getSession();  // 세션 초기화
+			String sid = (String) session.getAttribute("sid");
+			if(sid != null) { //로그인 한 상태
+				viewpage="insert.jsp";
+			} else {
+				response.sendRedirect("login.do?msg=2");
+				return;
+			}
+			
+			viewpage = "insert.jsp";
+			
 		
 		
 		} else if(comm.equals("/write.do")) {  // 글 수정 폼 이동
@@ -69,7 +85,7 @@ public class board_controller extends HttpServlet {
 			viewpage = "write.jsp";
 		
 		
-		} else if(comm.equals("/modifyOk.do")) {  
+		} else if(comm.equals("/modifyOk.do")) {    // 수정
 			
 			request.setCharacterEncoding("utf-8");
 		
@@ -122,12 +138,28 @@ public class board_controller extends HttpServlet {
 			response.sendRedirect("boardList.do");  // 포워딩 하지 않고 강제로 list.do 이동
 			return; // 프로그램 진행 멈춤
 			
-		} else if(comm.equals("/login.do"))	{
-			
-			
+		} else if(comm.equals("/login.do"))	{ //로그인 페이지로 이동
 			viewpage ="login.jsp";
 		
-		
+		}else if(comm.equals("/loginOk.do"))	{
+			request.setCharacterEncoding("utf-8");
+			String loginId = request.getParameter("id");
+			String loginPw = request.getParameter("pw");
+			
+			int loginFlag=memberDao.loginCheck(loginId, loginPw);
+			
+			if(loginFlag ==1) {
+				session = request.getSession();  // session은 request객체에서 선언해줘야한다. 
+				session.setAttribute("sid", loginId);
+				
+			} else {
+				response.sendRedirect("login.do?msg=1");
+				return; // 멈춰야하니까 써준다. 안쓰면 밑에 viewpage까지 포워딩 하려고해서 꼭 써야한다.
+			}
+			
+			
+			viewpage ="boardList.do";
+				
 		}else {
 			viewpage = "homepage.jsp";
 		} 

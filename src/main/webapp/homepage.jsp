@@ -87,7 +87,7 @@ footer{margin-top:80px; text-align:center; color:var(--muted); padding:20px}
 
 
 <!-- 히어로 섹션 -->
-<section class="hero">+
+<section class="hero">
 
 <h1>Welcome</h1>
 <p>즐거운 소통 페이지 입니다.</p>

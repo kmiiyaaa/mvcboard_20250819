@@ -28,18 +28,17 @@
   <title>Board Detail</title>
   <link rel="stylesheet" href="css/boardStyle.css">
 </head>
-<body>
- <!-- 상단 네비 -->
 <div class="nav">
-  <div class="nav-inner container">
-    <div class="brand">
-      <a href="homepage.jsp" style="color:inherit; text-decoration:none;">HOME</a>
+    <div class="nav-inner">
+        <div class="brand">
+            <a href="homepage.jsp">HOME</a>
+        </div>
+        <div class="menu">
+            <a href="boardList.do">자유게시판</a>  | 
+            <a href="login.jsp">로그인</a>
+        </div>
     </div>
-    <div>
 </div>
-      <div><a href="#" style="color:var(--accent); text-decoration:none">로그인</a></div>
-    </div>
-  </div>
 
 <main class="container" align="center">
   <h1 class="post-title">${boardDto.btitle}</h1>
@@ -61,8 +60,9 @@
     ${boardDto.bcontent}
   <br><br>
   </div>
-  <a href="modifyOk.do?bnum=${boardDto.bnum}"><button class="btn"> 수정 </button></a>
+  <a href="write.do?bnum=${boardDto.bnum}"><button class="btn"> 수정 </button></a>
   <a href="delete.do?bnum=${boardDto.bnum}"><button class="btn"> 삭제 </button></a>
+  <a href="boardList.do"><button class="btn"> 글목록보기 </button></a>
 </main>
 
     <footer>© 2025 Board</footer>

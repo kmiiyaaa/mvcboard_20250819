@@ -29,7 +29,7 @@ body{
 footer{color:#8a8a92; font-size:14px; text-align:center; padding:40px 0}
 
 .btn {
-  padding: 8px 20px;
+  padding: 8px 15px;
   border-radius: 10px;
   border: none;
   background-color: #0055cc;
@@ -140,29 +140,39 @@ body {
     color: #ffffff;
 }
 
-/* 상단 네비 */
+/* 헤더 스타일 */
 .nav {
-    background-color: #1f1f1f;
+    width: 100%;
+    background-color: #fff;
+    border-bottom: 1px solid #ddd;
     padding: 15px 0;
-    border-bottom: 1px solid #333;
 }
 
 .nav-inner {
     width: 90%;
+    max-width: 1200px;
     margin: 0 auto;
     display: flex;
     justify-content: space-between;
     align-items: center;
 }
 
-.nav a {
-    color: #ffffff;
+.nav-inner .brand a {
+    font-size: 20px;
+    font-weight: bold;
     text-decoration: none;
-    margin-left: 15px;
+    color: #000;
 }
 
-.nav a:hover {
-    color: #1e90ff;
+.nav-inner .menu a {
+    font-size: 14px;
+    color: #000;
+    text-decoration: none;
+    margin-left: 10px;
+}
+
+.nav-inner .menu a:hover {
+    text-decoration: underline;
 }
 
 /* 게시글 컨테이너 */

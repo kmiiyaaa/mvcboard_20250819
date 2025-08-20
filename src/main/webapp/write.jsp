@@ -3,58 +3,63 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 
 
+<%
+    // 수정 모드인지 확인
+    BoardDto boardDto = (BoardDto) request.getAttribute("boardDto");
+    boolean isEdit = (boardDto != null);
+%>
+
 <!DOCTYPE html>
 <html lang="ko">
 <head>
 <meta charset="UTF-8">
-<title><%="글 수정" + "새 글 작성" %></title>
+<title><%= isEdit ? "글 수정" : "글 수정" %></title>
 <link rel="stylesheet" href="css/writecss.css">
 </head>
 <body>
-<!-- 상단 네비 -->
 <div class="nav">
-  <div class="nav-inner container">
-    <div class="brand">
-      <a href="homepage.jsp" style="color:inherit; text-decoration:none;">HOME</a>
+    <div class="nav-inner">
+        <div class="brand">
+            <a href="homepage.jsp">HOME</a>
+        </div>
+        <div class="menu">
+            <a href="boardList.do">자유게시판</a> | 
+            <a href="login.jsp">로그인</a>
+        </div>
     </div>
-    <div>
-      <a href="#" style="color:var(--accent); text-decoration:none">로그인</a>
-    </div>
-    <div><a href="#" style="color:var(--accent); text-decoration:none">로그인</a></div>
-  </div>
 </div>
-
 
 <div class="board-container">
-    <h2>게시글 수정</h2>
+    <h2><%= isEdit ? "게시글 수정" : "새 글 작성" %></h2>
 
-    <form action="modifyOk.do" method="post" class="edit-form">
-    <input type="hidden" name="bnum" value="${boardDto.bnum }">
-      <div class="form-group">
-        <label for="title">제목</label>
-        <input type="text" id="title" name="btitle" required />
-      </div>
+    <form action="<%= isEdit ? "modifyOk.do" : "writeOk.do" %>" method="post" class="edit-form">
+        <% if(isEdit) { %>
+            <!-- 수정 시 bnum hidden으로 전달 -->
+            <input type="hidden" name="bnum" value="<%= boardDto.getBnum() %>">
+        <% } %>
 
-      <div class="form-group">
-        <label for="author">작성자</label>
-        <input type="text" id="author" name="memberid"  readonly />
-      </div>
+        <div class="form-group">
+            <label for="title">제목</label>
+            <input type="text" id="title" name="btitle" value="<%= isEdit ? boardDto.getBtitle() : "" %>" required />
+        </div>
 
-      <div class="form-group">
-        <label for="content">내용</label>
-        <textarea id="content" name="bcontent" rows="10" required>
+        <div class="form-group">
+            <label for="author">작성자</label>
+            <input type="text" id="author" name="memberid" value="<%= isEdit ? boardDto.getMemberid() : "" %>" readonly />
+        </div>
 
-		</textarea>
-      </div>
+        <div class="form-group">
+            <label for="content">내용</label>
+            <textarea id="content" name="bcontent" rows="10" required><%= isEdit ? boardDto.getBcontent() : "" %></textarea>
+        </div>
 
-      <div class="form-buttons">
-        <button type="submit" class="btn btn-primary">저장</button>
-        <a href="javascript:history.go(-1)" class="btn btn-secondary">취소</a>
-      </div>
+        <div class="form-buttons">
+            <button type="submit" class="btn btn-primary"><%= isEdit ? "수정 저장" : "등록" %></button>
+            <a href="javascript:history.go(-1)" class="btn btn-secondary">취소</a>
+        </div>
     </form>
-  </div>
 </div>
+
 <footer>© 2025 Board</footer>
-</main>
 </body>
 </html>

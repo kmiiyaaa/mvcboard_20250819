@@ -223,6 +223,7 @@ public class BoardDao {
 			public void boardUpdate(String bnum, String btitle, String bcontent) {
 				
 				String sql = "UPDATE board SET btitle=?, bcontent=? WHERE bnum=?";
+				int result = 0;
 		
 			    try {
 			        Class.forName(driverName);

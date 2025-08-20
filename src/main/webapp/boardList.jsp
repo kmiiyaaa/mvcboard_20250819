@@ -22,13 +22,18 @@
 <div class="nav">
   <div class="nav-inner container">
     <div class="brand"><a href="homepage.jsp" style="color:inherit; text-decoration:none;">HOME</a></div>
-    <div><a href="#" style="color:var(--accent); text-decoration:none">로그인</a></div>
+    <div><a href="#" style="color:black; text-decoration:none">로그인</a></div>
   </div>
 </div>
 
 <main class="container">
   <h1>자유 게시판</h1>
   <div style="text-align:right; margin-bottom:1rem;">
+  <span stye="color:rosybrown">
+   	<c:if test="${not empty sessionScope.sid }">
+   		<b>${sessionScope.sid}</b>님 로그인중 
+   	</c:if>
+   </span>
     <a href="insert.do"><button class="btn">글쓰기</button></a>
   </div>
 
