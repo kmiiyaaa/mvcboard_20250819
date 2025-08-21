@@ -31,7 +31,7 @@ public class BoardDao {
 		String sql = "SELECT  ROW_NUMBER() over (ORDER BY bnum ASC) as bno, "
 				   + "b.bnum, b.btitle, b.bcontent, b.memberid, m.memberemail, b.bdate, b.bhit "
 		           + "FROM board b "
-		           + "INNER JOIN members m ON b.memberid = m.memberid "
+		           + "LEFT JOIN members m ON b.memberid = m.memberid "
 		           + "ORDER BY bno DESC";
 		//List<BoardMemberDto> bmDtos = new ArrayList<BoardMemberDto>();
 		List<BoardDto> bDtos = new ArrayList<BoardDto>(); 
@@ -173,13 +173,14 @@ public class BoardDao {
 
 	public BoardDto contentView(String boardnum) { //게시판 글 목록에서 유저가 클릭한 글 번호의 글 dto 반환 메서드
 		
-		   String sql = "SELECT b.bno, b.bnum, b.btitle, b.bcontent, b.memberid, b.bhit, b.bdate, m.memberemail " +
-	                 "FROM board b " +
-	                 "LEFT JOIN members m ON b.memberid = m.memberid " +
-	                 "WHERE b.bnum = ?";
+		   String sql = "SELECT  ROW_NUMBER() over (ORDER BY bnum ASC) as bno, "
+				   + "b.bnum, b.btitle, b.bcontent, b.memberid, m.memberemail, b.bdate, b.bhit "
+		           + "FROM board b "
+		           + "LEFT JOIN members m ON b.memberid = m.memberid "
+		           + " WHERE bnum=?";
+		           
 			
-			// BoardDto boardDto = new BoardDto();
-		 	BoardDto boardDto = null;
+		  BoardDto boardDto = null;
 
 		    try {
 		    	
@@ -190,7 +191,7 @@ public class BoardDao {
 		        pstmt.setString(1, boardnum);
 		        rs = pstmt.executeQuery();
 
-		        while (rs.next()) {
+		        while (rs.next()) {	        	
 		        	
 		        	int bno = rs.getInt("bno");
 		        	int bnum = rs.getInt("bnum");
@@ -198,13 +199,12 @@ public class BoardDao {
 					String bcontent = rs.getString("bcontent");
 					String memberid = rs.getString("memberid");
 					String memberemail = rs.getString("memberemail"); 
-					
 					int bhit = rs.getInt("bhit");
 					String bdate = rs.getString("bdate");
 					
-					MemberDto memberDto = new MemberDto();
-					memberDto.setMemberid(memberid);
-					memberDto.setMemberemail(memberemail);
+					MemberDto memberDto = new MemberDto();  // memberDto 인스턴스화
+					memberDto.setMemberid(memberid);  //memberid 초기화
+					memberDto.setMemberemail(memberemail);  // memberemail 초기화
 		        	
 		        	boardDto = new BoardDto(bno, bnum, btitle, bcontent, memberid, bhit, bdate, memberDto);
 		        }
