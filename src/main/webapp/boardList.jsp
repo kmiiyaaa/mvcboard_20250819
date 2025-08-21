@@ -33,10 +33,21 @@
    		<b>${sessionScope.sid}</b>님 로그인중 
    	</c:if>
    </span>
+  
   <div style="text-align:right; margin-bottom:1rem;">
- 
     <a href="insert.do"><button class="btn">글쓰기</button></a>
   </div>
+  
+  <form action="boardList.do" method="get">
+  	<select name="search">
+  		<option value="btitle"> 제목 </option>
+  		<option value="bcontent"> 내용 </option>
+  		<option value="b.memberid"> 작성자 </option>
+  	</select>
+  	<input type="text" name="searchKeyword" placehold="검색어 입력">
+  	<input type="submit" value="검색">
+  </form>
+  
 
   <div class="panel">
     <table>

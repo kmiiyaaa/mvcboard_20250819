@@ -55,13 +55,24 @@ public class board_controller extends HttpServlet {
 		BoardDao boardDao = new BoardDao();
 		MemberDao memberDao = new MemberDao();
 		List<BoardDto> bDtos = new ArrayList<BoardDto>();
-		List<BoardMemberDto> bmDtos = new ArrayList<BoardMemberDto>();
+	//	List<BoardMemberDto> bmDtos = new ArrayList<BoardMemberDto>();
 		HttpSession session = null;
 		
 		
 		if(comm.equals("/boardList.do")) { //게시판의 모든 글 보기 요청
-		    bDtos = boardDao.boardList();
-		    request.setAttribute("bDtos", bDtos); 
+			
+			String search = request.getParameter("search");
+			String searchKeyword = request.getParameter("searchKeyword");
+			                               // 빈칸인데 검색누르면 null 아니고 "", strip() 넣어서 양쪽 공백삭제 
+			
+			if(search != null && searchKeyword !=null && !searchKeyword.strip().isEmpty()) {  // 검색 결과 리스트를 원하는 경우 
+				bDtos = boardDao.searchBoardList(searchKeyword, search);  // 검색어를 넣어 검색된 애를 dto로 넣어서 arraylist로 넘겨줘야한다
+			} else {  // 모든 게시판 리스트를 원하는경우 (list.do로 넘어온 경우) 
+				 bDtos = boardDao.boardList();
+			}
+			
+		   
+		    request.setAttribute("bDtos", bDtos);  // 위에 둘중하나 경우를 request 객체에 싣고 포워딩해주는거
 		    viewpage = "boardList.jsp";
 		
 		
@@ -156,6 +167,7 @@ public class board_controller extends HttpServlet {
 			request.setAttribute("boardDto", boardDto);
 						
 				
+			
 			viewpage = "boardContent.jsp";
 			
 		} else if(comm.equals("/writeOk.do")) {  // 글 수정
@@ -200,7 +212,7 @@ public class board_controller extends HttpServlet {
 		dispatcher.forward(request, response);	
 		 // boardList.jsp에게 웹 서블릿 내에서 제작한 request 객체를 전달한 후 boardList.jsp로 이동해라
 		
-	}
+		}
 	
 	
 	  

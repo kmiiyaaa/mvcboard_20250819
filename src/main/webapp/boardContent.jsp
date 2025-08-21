@@ -40,14 +40,11 @@
   
   <!-- 메타 정보 영역 -->
   <div class="meta-box" align="center">
-    <span><strong>번호</strong> ${boardDto.bnum}</span>
-      
+    <span><strong>번호</strong> ${boardDto.bnum}</span> 
     <span><strong>작성자</strong> ${boardDto.memberid}</span>
     <span><strong>이메일</strong> ${boardDto.memberDto.memberemail}</span>
     <span><strong>작성일</strong> ${boardDto.bdate}</span>
-	  <span><strong>조회수</strong> ${boardDto.bhit}</span>
-	  
-   
+	  <span><strong>조회수</strong> ${boardDto.bhit}</span> 
   </div>
   <hr>
 
@@ -58,10 +55,10 @@
   <br><br><br><br>
   </div>
   <a href="boardList.do"><button class="btn"> 글목록보기 </button></a>
-	<c:if test="${sessionScope.sid == boardDao.memberid }">
+ <!-- 	<c:if test="${sessionScope.sid == boardDao.memberid }"> -->
 	  <a href="write.do?bnum=${boardDto.bnum}"><button class="btn"> 수정 </button></a>
 	  <a href="delete.do?bnum=${boardDto.bnum}"><button class="btn"> 삭제 </button></a>
-  </c:if>
+  <!-- </c:if> -->
   
 </main>
 
