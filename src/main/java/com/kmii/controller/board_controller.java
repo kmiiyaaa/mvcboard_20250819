@@ -92,22 +92,25 @@ public class board_controller extends HttpServlet {
 		
 		
 		} else if(comm.equals("/write.do")) {  // 글 수정 폼 이동
-			request.setCharacterEncoding("utf-8");
-			String sid = (String) session.getAttribute("sid");
-			
-			String bnum = request.getParameter("bnum"); // 수정하려고 하는 글 번호
-			BoardDto boardDto = boardDao.contentView(bnum);
-			
-			if(boardDto.getMemberid().equals(sid)) {
-				request.setAttribute("boardDto", boardDto);
-				viewpage = "write.jsp";
-			} else {
-				viewpage = "boardList.do";
-			}
-			
-			request.setAttribute("boardDto", boardDto);
-			viewpage = "write.jsp";
-		
+		    request.setCharacterEncoding("utf-8");
+		    
+		    session = request.getSession(false); // 기존 세션 가져오기, 없으면 null
+		    if (session == null || session.getAttribute("sid") == null) {
+		        response.sendRedirect("login.do?msg=2");
+		        return;
+		    }
+
+		    String sid = (String) session.getAttribute("sid");
+		    
+		    String bnum = request.getParameter("bnum"); // 수정하려고 하는 글 번호
+		    BoardDto boardDto = boardDao.contentView(bnum);
+		    
+		    if(boardDto.getMemberid().equals(sid)) {
+		        request.setAttribute("boardDto", boardDto);
+		        viewpage = "write.jsp";
+		    } else {
+		        viewpage = "boardList.do";
+		    }
 		
 		} else if(comm.equals("/modifyOk.do")) {    // 수정
 			

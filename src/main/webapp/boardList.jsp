@@ -14,21 +14,24 @@
   <style>
     table { width:100%; border-collapse:collapse; }
     th, td { border:1px solid #444; padding:0.5rem; text-align:center; }
-    th { background:#222; color:#eee; }
-    td.title a { text-decoration:none; color:inherit; }
+    th { }
+    td.title a { text-decoration:none;  }
   </style>
 </head>
 <body>
 <div class="nav">
   <div class="nav-inner container">
     <div class="brand"><a href="homepage.jsp" style="color:inherit; text-decoration:none;">HOME</a></div>
-    <div><a href="#" style="color:black; text-decoration:none">로그인</a></div>
+  </div>
+  <div>
+  <a href="boardList.do" style="color:black; text-decoration:none">게시판</a>ㅣ
+  <a href="login.do" style="color:black; text-decoration:none">로그인</a>
   </div>
 </div>
 
 <main class="container">
   <h1>자유 게시판</h1>
-   <span stye="color:rosybrown;">
+   <span style="color:rosybrown;">
    	<c:if test="${not empty sessionScope.sid }">
    		<b>${sessionScope.sid}</b>님 로그인중 
    	</c:if>
@@ -85,8 +88,7 @@
       </tbody>
     </table>
   </div>
-</body>
-</html>
+
 
   <footer style="margin-top:1rem;">© 2025 Board</footer>
 </main>

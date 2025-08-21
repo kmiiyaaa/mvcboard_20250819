@@ -54,11 +54,9 @@
     ${boardDto.bcontent}
   <br><br><br><br>
   </div>
-  <a href="boardList.do"><button class="btn"> 글목록보기 </button></a>
- <!-- 	<c:if test="${sessionScope.sid == boardDao.memberid }"> -->
+  	<a href="boardList.do"><button class="btn"> 글목록보기 </button></a>
 	  <a href="write.do?bnum=${boardDto.bnum}"><button class="btn"> 수정 </button></a>
 	  <a href="delete.do?bnum=${boardDto.bnum}"><button class="btn"> 삭제 </button></a>
-  <!-- </c:if> -->
   
 </main>
 
