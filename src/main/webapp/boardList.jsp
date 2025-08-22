@@ -88,6 +88,40 @@
       </tbody>
     </table>
   </div>
+  
+  <!-- 페이지네이션 -->
+
+	<div class="pagination">
+
+	<!-- 첫번째 페이지로 이동 화살표 (1페이지로 이동)-->
+	<c:if test="${currentPage > 1 }">
+		<a href="boardList.do?page=1">◀◀</a>
+	</c:if>
+	
+	<!-- 페이지 그룹이동 -->
+	<c:if test="${startPage > 1}">
+		<a href="boardList.do?page=${startPage - 1}"> ◀ </a>
+	</c:if>
+	
+ <c:forEach begin="${startPage}" end="${endPage}" var="i">
+		<c:choose>
+			<c:when test="${i == currentPage}">
+				<a href="boardList.do?page=${i}" class="active">${i}</a>
+			</c:when>
+			<c:otherwise>
+				<a href="boardList.do?page=${i}">${i}</a>
+			</c:otherwise>
+		</c:choose>
+	</c:forEach>
+  
+   <!--그룹 이동-->
+  <c:if test="${endPage < totalPage}">   <!-- > 말고 != 써도가능 -->
+  	<a href="boardList.do?page=${endPage + 1}">▶</a>
+  </c:if>
+  <!-- 마지막 페이지로 이동 화살표-->
+  <c:if test="${currentPage < totalPage}">
+  	<a href="boardList.do?page=${totalPage}">▶▶</a>
+  </c:if>
 
 
   <footer style="margin-top:1rem;">© 2025 Board</footer>

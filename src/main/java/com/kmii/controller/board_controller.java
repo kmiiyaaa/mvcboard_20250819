@@ -21,9 +21,11 @@ import com.kmii.dto.BoardDto;
   @WebServlet : 웹서버가 받기전에 먼저 서블릿이 받아서 처리한다(가로챈다)
  */
 @WebServlet("*.do")
+
 public class board_controller extends HttpServlet {
 
-       
+	private static final int PAGE_GROUP_SIZE = 10 ; 
+	BoardDao boardDao = new BoardDao();
    
     public board_controller() {
        
@@ -39,14 +41,13 @@ public class board_controller extends HttpServlet {
 	}
 	
 	private void actionDo (HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		request.setCharacterEncoding("utf-8");
 		
+		
+		request.setCharacterEncoding("utf-8");
 		String uri = request.getRequestURI();
 		//System.out.println(uri);   // /jsp_mvcboard_250819/boardList.do 출력
-		
 		String conpath = request.getContextPath();
 		//System.out.println(conpath);   // /jsp_mvcboard_250819 출력
-		
 		String comm = uri.substring(conpath.length());  // 최종 요청값
 		System.out.println(comm);  //   /*.do 출력
 		
@@ -59,35 +60,67 @@ public class board_controller extends HttpServlet {
 		HttpSession session = null;
 		
 		
+		
 		if(comm.equals("/boardList.do")) { //게시판의 모든 글 보기 요청
 			
+						
 			String search = request.getParameter("search");
-			String searchKeyword = request.getParameter("searchKeyword");
-			                               // 빈칸인데 검색누르면 null 아니고 "", strip() 넣어서 양쪽 공백삭제 
+			String searchKeyword = request.getParameter("searchKeyword"); // 빈칸인데 검색누르면 null 아니고 "", strip() 넣어서 양쪽 공백삭제
+			int page = 1;
+			int totalContent = boardDao.countBoard();
+			
+			
+			
+			if(request.getParameter("page") == null) {   // 참이면 링크타고 게시판으로 들어온 경우
+				page = 1;  // 무조건 첫페이지를 보여주게 됨
+			} else { //유저가 보고 싶은 페이지 번호를 클릭한 경우
+				page = Integer.parseInt(request.getParameter("page"));  //유저가 클릭한 유저가 보고 싶어하는 페이지의 번호
+			}
+						
+			
 			
 			if(search != null && searchKeyword !=null && !searchKeyword.strip().isEmpty()) {  // 검색 결과 리스트를 원하는 경우 
-				bDtos = boardDao.searchBoardList(searchKeyword, search);  // 검색어를 넣어 검색된 애를 dto로 넣어서 arraylist로 넘겨줘야한다
+				bDtos = boardDao.searchBoardList(searchKeyword, search, page);  // 검색어를 넣어 검색된 애를 dto로 넣어서 arraylist로 넘겨줘야한다
+			
 			} else {  // 모든 게시판 리스트를 원하는경우 (list.do로 넘어온 경우) 
-				 bDtos = boardDao.boardList();
+				 bDtos = boardDao.boardList(page);
 			}
 			
+			
+			int totalPage = (int) Math.ceil((double)totalContent / BoardDao.PAGE_SIZE ) ;
+			int startPage = (((page-1) / PAGE_GROUP_SIZE) * PAGE_GROUP_SIZE)+1 ;
+			int endPage = startPage + (PAGE_GROUP_SIZE -1); // 게시글 없는 페이지까지 출력된다
+			
+			//마지막 페이지 그룹인 경우에는 실제마지막 페이지로 표시
+			// 글갯수 437 - 44페이지 , 실제 endpage는 44로변경
+			if (endPage > totalPage) {
+				endPage = totalPage;  //  totalPage = 실제 마지막 페이지값 (437 -> 44)
+			}
+		
+			
+			
+		   // System.out.println(countDtos.get(0));
+		   request.setAttribute("bDtos", bDtos);  // 위에 둘중하나 경우를 request 객체에 싣고 포워딩해주는거
+		   request.setAttribute("currentPage", page);
+		   request.setAttribute("totalPage", totalPage);
+		   request.setAttribute("startPage", startPage);
+		   request.setAttribute("endPage", endPage); // 페이지 그룹 출력시 마지막 페이지번호
 		   
-		    request.setAttribute("bDtos", bDtos);  // 위에 둘중하나 경우를 request 객체에 싣고 포워딩해주는거
-		    viewpage = "boardList.jsp";
+		   
+		   
+		   viewpage = "boardList.jsp";
 		
-		
-		} else if(comm.equals("/insert.do")) { // 글쓰기 폼으로 이동
-			session = request.getSession();  // 세션 초기화
-			String sid = (String) session.getAttribute("sid");
+//			String sid = (String) session.getAttribute("sid");
+//			
+//			if(sid != null) { //로그인 한 상태
+//				viewpage="insert.jsp";
+//			} else {
+//				response.sendRedirect("login.do?msg=2");
+//				return;
+//			}
+//			
 			
-			if(sid != null) { //로그인 한 상태
-				viewpage="insert.jsp";
-			} else {
-				response.sendRedirect("login.do?msg=2");
-				return;
-			}
 			
-			viewpage = "insert.jsp";
 			
 		
 		
@@ -131,7 +164,7 @@ public class board_controller extends HttpServlet {
 			BoardDto boardDto = boardDao.getBoardDetail(bnum);
 			request.setAttribute("boardDto", boardDto);
 			
-			viewpage = "boardContent.jsp";
+			viewpage = "boardContent.do";
 		
 		
 		}else if(comm.equals("/delete.do")) {  // 글 삭제
