@@ -11,7 +11,7 @@
 <body>
 <!-- 상단 공지 -->
 <div class="top-bar">
-  2025 GOODBYE SUMMER - 50% OFF
+  통증으로부 00정형외과 입니다
 </div>
 
 <!-- 네비게이션 -->
