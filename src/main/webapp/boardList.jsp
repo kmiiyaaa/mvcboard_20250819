@@ -103,16 +103,17 @@
 		<a href="boardList.do?page=${startPage - 1}&search=${search}&searchKeyword=${searchKeyword}"> ◀ </a>
 	</c:if>
 	
- <c:forEach begin="${startPage}" end="${endPage}" var="i">
-		<c:choose>
-			<c:when test="${i == currentPage}">
-				<a href="boardList.do?page=${i}&search=${search}&searchKeyword=${searchKeyword}"class="active">${i}</a>
-			</c:when>
-			<c:otherwise>
-				<a href="boardList.do?page=${i}&search=${search}&searchKeyword=${searchKeyword}">${i}</a>
-			</c:otherwise>
-		</c:choose>
-	</c:forEach>
+	<c:forEach begin="${startPage}" end="${endPage}" var="i">
+    <c:choose>
+        <c:when test="${i == currentPage}">
+            <a class="active" href="boardList.do?page=${i}&search=${search}&searchKeyword=${searchKeyword}">${i}</a>
+        </c:when>
+        <c:otherwise>
+            <a href="boardList.do?page=${i}&search=${search}&searchKeyword=${searchKeyword}">${i}</a>
+        </c:otherwise>
+    </c:choose>
+</c:forEach>
+	
   
    <!--그룹 이동-->
   <c:if test="${endPage < totalPage}">   <!-- > 말고 != 써도가능 -->
@@ -120,7 +121,7 @@
   </c:if>
   <!-- 마지막 페이지로 이동 화살표-->
   <c:if test="${currentPage < totalPage}">
-  	<a href="boardList.do?page=${totalPage}& search=${search}&searchKeyword=${searchKeyword}" >▶▶</a>
+  	<a href="boardList.do?page=${totalPage}&search=${search}&searchKeyword=${searchKeyword}" >▶▶</a>
   </c:if>
 
 

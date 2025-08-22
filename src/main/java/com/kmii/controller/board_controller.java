@@ -13,6 +13,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.kmii.dto.BoardMemberDto;
+import com.kmii.command.BCommand;
+import com.kmii.command.BmodifyCommand;
+import com.kmii.command.BwriteCommand;
 import com.kmii.dao.BoardDao;
 import com.kmii.dao.MemberDao;
 import com.kmii.dto.BoardDto;
@@ -58,6 +61,7 @@ public class board_controller extends HttpServlet {
 		List<BoardDto> bDtos = new ArrayList<BoardDto>();
 	//	List<BoardMemberDto> bmDtos = new ArrayList<BoardMemberDto>();
 		HttpSession session = null;
+		BCommand bCommand = null;
 		
 		
 		
@@ -80,17 +84,31 @@ public class board_controller extends HttpServlet {
 			}
 						
 			
-			
-			if(search != null && searchKeyword !=null && !searchKeyword.strip().isEmpty()) {  // 검색 결과 리스트를 원하는 경우 
-				bDtos = boardDao.searchBoardList(searchKeyword, search, page);  // 검색어를 넣어 검색된 애를 dto로 넣어서 arraylist로 넘겨줘야한다
-			
-			request.setAttribute("search", search);
-			request.setAttribute("searchKeyword", searchKeyword);
-			
-			} else {  // 모든 게시판 리스트를 원하는경우 (list.do로 넘어온 경우) 
-				 bDtos = boardDao.boardList(page);
+			// 검색어가 있으면 검색된 글 수 카운트
+			if (search != null && searchKeyword != null && !searchKeyword.strip().isEmpty()) {
+			    totalContent = boardDao.countSearch(search, searchKeyword);
+			    bDtos = boardDao.searchBoardList(searchKeyword, search, page);
+
+			    request.setAttribute("search", search);
+			    request.setAttribute("searchKeyword", searchKeyword);
+			} else { 
+			    // 검색어 없으면 전체 카운트
+			    totalContent = boardDao.countBoard();
+			    bDtos = boardDao.boardList(page);
 			}
 			
+			
+//			
+//			if(search != null && searchKeyword !=null && !searchKeyword.strip().isEmpty()) {  // 검색 결과 리스트를 원하는 경우 
+//			bDtos = boardDao.searchBoardList(searchKeyword, search, page);  // 검색어를 넣어 검색된 애를 dto로 넣어서 arraylist로 넘겨줘야한다
+//			
+//			request.setAttribute("search", search);
+//			request.setAttribute("searchKeyword", searchKeyword);
+//			
+//			} else {  // 모든 게시판 리스트를 원하는경우 (list.do로 넘어온 경우) 
+//				 bDtos = boardDao.boardList(page);
+//			}
+//			
 			
 			int totalPage = (int) Math.ceil((double)totalContent / BoardDao.PAGE_SIZE ) ;
 			int startPage = (((page-1) / PAGE_GROUP_SIZE) * PAGE_GROUP_SIZE)+1 ;
@@ -139,61 +157,57 @@ public class board_controller extends HttpServlet {
 		    request.setCharacterEncoding("utf-8");
 		    
 		    session = request.getSession(false); // 기존 세션 가져오기, 없으면 null
-		    if (session == null || session.getAttribute("sid") == null) {
-		        response.sendRedirect("login.do?msg=2");
-		        return;
-		    }
-
 		    String sid = (String) session.getAttribute("sid");
-		    
+
 		    String bnum = request.getParameter("bnum"); // 수정하려고 하는 글 번호
 		    BoardDto boardDto = boardDao.contentView(bnum);
 		    
-		    if(boardDto.getMemberid().equals(sid)) {
+		    if(boardDto.getMemberid().equals(sid)) {  // 참이면 수정가능
 		        request.setAttribute("boardDto", boardDto);
 		        viewpage = "write.jsp";
 		    } else {
-		        viewpage = "boardList.do";
+		    	response.sendRedirect("write.jsp?msg=1");
+			    return;
+			    
 		    }
+		    
+		    
+//		    if (session == null || session.getAttribute("sid") == null) {
+//		        response.sendRedirect("login.do?msg=2");
+//		        return;
+//		    }
+
+		   
+		    
 		
-		} else if(comm.equals("/modifyOk.do")) {    // 수정
-			
-			request.setCharacterEncoding("utf-8");
-			
-			
 		
 		
-			String bnum = request.getParameter("bnum");
-			String btitle =	request.getParameter("btitle");
+		} else if(comm.equals("/modifyOk.do")) {    // 수정 후 페이지 이동
 			
-			
-			String memberid =request.getParameter("memberid");
-			String bcontent =request.getParameter("bcontent");
-			
-			boardDao.boardUpdate(bnum, btitle, bcontent);
-			
-			BoardDto boardDto = boardDao.getBoardDetail(bnum);
-			request.setAttribute("boardDto", boardDto);
+			bCommand = new BmodifyCommand();
+			bCommand.excute(request, response);
 			
 			viewpage = "boardContent.do";
 		
 		
 		}else if(comm.equals("/delete.do")) {  // 글 삭제
+			
 			String bnum=request.getParameter("bnum");
 			session = request.getSession(); 
 			
 			String sid = (String) session.getAttribute("sid");
 			
-			if(sid != null) { //로그인 한 상태
-				viewpage="insert.jsp";
+			BoardDto boardDto = boardDao.contentView(bnum);
+			
+			if(boardDto.getMemberid().equals(sid)) { //로그인 한 상태
+				boardDao.boardDelete(bnum);
+				viewpage="boardList.do";
 			} else {
-				response.sendRedirect("login.do?msg=2");
+				response.sendRedirect("write.jsp?error=1");
 				return;
 			}
 			
-			viewpage = "insert.jsp";
 			
-			boardDao.boardDelete(bnum);
 			
 			viewpage = "boardList.do";
 			
@@ -217,14 +231,14 @@ public class board_controller extends HttpServlet {
 			
 			viewpage = "boardContent.jsp";
 			
-		} else if(comm.equals("/writeOk.do")) {  // 글 수정
-			request.setCharacterEncoding("utf-8");
 			
-			String btitle =	request.getParameter("btitle");
-			String memberid =request.getParameter("memberid");
-			String bcontent =request.getParameter("bcontent");
+			 
+		} else if(comm.equals("/writeOk.do")) {  // 글  입력	
 			
-			boardDao.insertBoard(btitle, memberid, bcontent);  // 새글이 DB에 입력
+			bCommand = new BwriteCommand();
+			bCommand.excute(request, response);
+			
+			
 			response.sendRedirect("boardList.do");  // 포워딩 하지 않고 강제로 list.do 이동
 			return; // 프로그램 진행 멈춤
 			
@@ -250,7 +264,11 @@ public class board_controller extends HttpServlet {
 			
 			viewpage ="boardList.do";
 				
-		}else {
+		} else if (comm.equals("/index.do"))
+			viewpage = "index.jsp";
+		
+		
+		else {
 			viewpage = "homepage.jsp";
 		} 
 		

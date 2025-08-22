@@ -10,6 +10,7 @@ import java.util.List;
 import com.kmii.dto.BoardDto;
 import com.kmii.dto.BoardMemberDto;
 import com.kmii.dto.MemberDto;
+import com.mysql.cj.x.protobuf.MysqlxConnection.Close;
 
 
 public class BoardDao {
@@ -120,7 +121,9 @@ public class BoardDao {
 				
 				count++;
 				
-				}
+			}
+			
+			
 		
 	} catch (Exception e) {
 			System.out.println("게시판 목록 가져오기 실패"); 
@@ -147,6 +150,36 @@ public class BoardDao {
 		return count;  
 
 	  }	
+	
+	 
+	
+	// 검색된 글 수 
+	public int countSearch(String search, String searchKeyword) {
+	    String sql = "SELECT COUNT(*) FROM board WHERE " + search + " LIKE ?";
+	    int count = 0;
+
+	    try {
+	        Class.forName(driverName); 
+	        conn = DriverManager.getConnection(url, userName, password);
+	        pstmt = conn.prepareStatement(sql);
+	        pstmt.setString(1, "%" + searchKeyword + "%");
+	        rs = pstmt.executeQuery();
+
+	        if (rs.next()) {
+	            count = rs.getInt(1);
+	        }
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	    } finally {
+	        try {
+	            if(rs != null) rs.close();
+	            if(pstmt != null) pstmt.close();
+	            if(conn != null) conn.close();
+	        } catch(Exception e) { e.printStackTrace(); }
+	    }
+
+	    return count;
+	}
 		
 		
 		
@@ -283,7 +316,7 @@ public class BoardDao {
 		}
 		
 	
-			public void boardUpdate(String bnum, String btitle, String bcontent) {  // 글 수정 메서드
+	public void boardUpdate(String bnum, String btitle, String bcontent) {  // 글 수정 메서드
 				
 				String sql = "UPDATE board SET btitle=?, bcontent=? WHERE bnum=?";
 				int result = 0;
@@ -320,7 +353,7 @@ public class BoardDao {
 			}
 			
 	
-			public void boardDelete(String bnum) {   // 글삭제 메서드
+	public void boardDelete(String bnum) {   // 글삭제 메서드
 				
 				String sql = "DELETE FROM board WHERE bnum = ? ";
 				
@@ -355,7 +388,7 @@ public class BoardDao {
 			}
 			
 			
-			public void updateBhit(String bnum) {   // 조회수
+	public void updateBhit(String bnum) {   // 조회수
 			
 				String sql = "UPDATE board SET bhit=bhit+1 WHERE bnum=? ";   // 조회수가 1씩 늘어나는 sql문
 				
@@ -428,7 +461,7 @@ public class BoardDao {
 				//BoardMemberDto bmDto = new BoardMemberDto(bnum, btitle, bcontent, memberid, memberemail ,bhit, bdate);
 				MemberDto memberDto = new MemberDto();
 				memberDto.setMemberid(memberid);
-				memberDto.setMemberemail(memberemail);
+				memberDto.setMemberemail(memberemail);                     
 						
 						
 				BoardDto bDto = new BoardDto(bno, bnum, btitle, bcontent, memberid, bhit, bdate, memberDto);	
