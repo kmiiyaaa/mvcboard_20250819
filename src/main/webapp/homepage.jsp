@@ -42,7 +42,7 @@
     <h3>📌 NEW UPDATE</h3>
      <p>최신 업데이트와 소식을 확인하세요.</p> 
      <div class="card"> <h3><a href="boardList.do" ;">
-     💬 게시판</a></h3> <a href="boardList.jsp" ;">자유롭게 질문하고 소통하세요.</a>
+     💬 게시판</a></h3> <a href="boardList.do" ;">자유롭게 질문하고 소통하세요.</a>
       <h3>🔒 회원</h3></div>
   </section>
 </main>

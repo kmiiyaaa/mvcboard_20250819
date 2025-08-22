@@ -73,6 +73,8 @@ public class board_controller extends HttpServlet {
 			
 			if(request.getParameter("page") == null) {   // 참이면 링크타고 게시판으로 들어온 경우
 				page = 1;  // 무조건 첫페이지를 보여주게 됨
+			
+			
 			} else { //유저가 보고 싶은 페이지 번호를 클릭한 경우
 				page = Integer.parseInt(request.getParameter("page"));  //유저가 클릭한 유저가 보고 싶어하는 페이지의 번호
 			}
@@ -81,6 +83,9 @@ public class board_controller extends HttpServlet {
 			
 			if(search != null && searchKeyword !=null && !searchKeyword.strip().isEmpty()) {  // 검색 결과 리스트를 원하는 경우 
 				bDtos = boardDao.searchBoardList(searchKeyword, search, page);  // 검색어를 넣어 검색된 애를 dto로 넣어서 arraylist로 넘겨줘야한다
+			
+			request.setAttribute("search", search);
+			request.setAttribute("searchKeyword", searchKeyword);
 			
 			} else {  // 모든 게시판 리스트를 원하는경우 (list.do로 넘어온 경우) 
 				 bDtos = boardDao.boardList(page);
@@ -109,16 +114,22 @@ public class board_controller extends HttpServlet {
 		   
 		   
 		   viewpage = "boardList.jsp";
-		
-//			String sid = (String) session.getAttribute("sid");
-//			
-//			if(sid != null) { //로그인 한 상태
-//				viewpage="insert.jsp";
-//			} else {
-//				response.sendRedirect("login.do?msg=2");
-//				return;
-//			}
-//			
+		   
+
+			
+		} else if(comm.equals("/insert.do")) { //글 쓰기 폼으로 이동
+			
+			session = request.getSession();
+
+			String sid = (String) session.getAttribute("sid");
+			
+			if(sid != null) { //로그인 한 상태
+				viewpage="insert.jsp";
+			} else {
+				response.sendRedirect("login.do?msg=2");
+				return;
+			}
+			
 			
 			
 			
